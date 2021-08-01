@@ -15,12 +15,18 @@ class TasksController extends Controller
      */
     public function index()
     {
+        if(\Auth::check()){
         //getでtasks/にアクセスされた場合の一覧表示処理
         $tasks = Task::all();
         
         return view('tasks.index',[
             'tasks' => $tasks,
             ]);
+        }
+        else{
+            return view('welcome');
+            
+        }
         
     }
 

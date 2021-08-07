@@ -81,15 +81,19 @@ class TasksController extends Controller
      */
     public function show($id)
     {
+         if(\Auth::check()){
         //idの値でタスクを検索して取得
         $task = Task::findOrFail($id);
-        
+         
     
         
-        //タスク詳細ビューでそれを表示
-        return view('tasks.show',[
+            //タスク詳細ビューでそれを表示
+            return view('tasks.show',[
             'task' => $task,
             ]);
+            }else{
+            return  view('welcome');
+            }
         
     }
 
@@ -105,9 +109,13 @@ class TasksController extends Controller
         $task = Task::findOrFail($id);
         
         // タスク編集ビューでそれを表示
+        if (\Auth::id() === $task->user_id) {
         return view('tasks.edit',[
             'task' => $task,
             ]);
+        }else{
+            return redirect('/');
+        }
     }
 
     /**
@@ -147,9 +155,11 @@ class TasksController extends Controller
     {
         //idの値でタスクを検索して取得
         $task = Task::findOrFail($id);
-        // タスクを削除
-        $task->delete();
-        
+        // 認証済みユーザ（閲覧者）がその投稿の所有者である場合は、投稿を削除
+        if (\Auth::id() === $task->user_id) {
+            $task->delete();
+        }
+
         // トップページへリダイレクトさせる
         return redirect('/');
     }

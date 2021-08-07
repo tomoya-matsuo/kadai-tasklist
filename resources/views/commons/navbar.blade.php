@@ -11,6 +11,10 @@
             <ul class="navbar-nav mr-auto"></ul>
             <ul class="navbar-nav">
                 @if (Auth::check())
+                    <a class="navbar-brand" href="#">{{ Auth::user()->name }}</a>
+                    
+                       
+                    {{--ログアウトへのリンク--}}
                     <li class="nav-item">{!! link_to_route('logout.get','ログアウト',[],['class' => 'nav-link']) !!}</li>
                 @else    
                 {{--ユーザ登録ページへのリンク--}}

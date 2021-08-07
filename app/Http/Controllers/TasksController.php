@@ -16,8 +16,10 @@ class TasksController extends Controller
     public function index()
     {
         if(\Auth::check()){
-        //getでtasks/にアクセスされた場合の一覧表示処理
-        $tasks = Task::all();
+        
+        $user = \Auth::user();
+        
+        $tasks = $user->tasks()->orderBy('created_at','desc')->paginate(10);
         
         return view('tasks.index',[
             'tasks' => $tasks,
@@ -59,13 +61,14 @@ class TasksController extends Controller
             'status' => 'required|max:10',
             'content' => 'required|max:255',
             ]);
+            
+          //認証済みユーザの投稿として作成
+        $request->user()->tasks()->create([
+            'content' => $request->content,
+            'status' => $request->status,
+            ]);
         
-        //タスクを作成
-        $task = new Task;
-        $task->status = $request->status;
-        $task->content = $request->content;
-        $task->save();
-        
+       
         // トップページへリダイレクトさせる
         return redirect('/');
     }
@@ -80,6 +83,8 @@ class TasksController extends Controller
     {
         //idの値でタスクを検索して取得
         $task = Task::findOrFail($id);
+        
+    
         
         //タスク詳細ビューでそれを表示
         return view('tasks.show',[
@@ -125,6 +130,7 @@ class TasksController extends Controller
         // タスクを更新
         $task->status = $request->status;  
         $task->content = $request->content;
+        $task->user_id = $request->user()->id;
         $task->save();
         
         // トップページへリダイレクトさせる

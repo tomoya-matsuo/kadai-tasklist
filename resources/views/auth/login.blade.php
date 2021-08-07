@@ -11,6 +11,7 @@
             {!! Form::open(['route' => 'login.post']) !!}
                 <div class="form-group">
                     {!! Form::label('email','メールアドレス') !!}
+                    @csrf
                     {!! Form::email('email',null,['class' => 'form-control']) !!}
                 </div>
                 

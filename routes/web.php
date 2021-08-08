@@ -10,9 +10,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::group(['middleware' => ['auth']], function () {
+
 Route::get('/', 'TasksController@index');
-});
+
 
 Route::resource('tasks','TasksController');
 

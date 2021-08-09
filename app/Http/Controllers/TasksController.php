@@ -30,7 +30,7 @@ class TasksController extends Controller
             ]);
         }
         else{
-            return view('welcome');
+            return redirect('welcome');
             
         }
         
@@ -85,9 +85,9 @@ class TasksController extends Controller
      */
     public function show($id)
     {
-         if(\Auth::check()){
         //idの値でタスクを検索して取得
         $task = Task::findOrFail($id);
+        if (\Auth::id() === $task->user_id){
          
     
         
@@ -96,8 +96,10 @@ class TasksController extends Controller
             'task' => $task,
             ]);
             }else{
-            return  view('welcome');
+            return  redirect('welcome');
             }
+             
+             
         
     }
 
